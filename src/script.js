@@ -39,7 +39,7 @@ function startGame(firstRun = true) {
   if (firstRun) alert("Let's play hangman! ☠️");
 
   //"The game loop"
-  while (true) {
+  while (!checkIfWin(word, guessedLetters) && lives) {
     //Ask user to input a letter
     const input = prompt(`
         Guess a letter
