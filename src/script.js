@@ -1,7 +1,7 @@
 const btnStartGame = document.querySelector("#btnStartGame");
 btnStartGame.addEventListener("click", startGame);
 
-let words = [
+const words = [
   "able",
   "about",
   "account",
