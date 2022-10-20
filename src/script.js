@@ -875,7 +875,7 @@ const validateInput = (input) => {
     return [false, "You didn't guess anything. 🤷🏻‍♂️"];
   }
 
-  if (!(input.length === 1 && /^[a-zA-Z]+$/.test(input))) {
+  if (!/^[a-zA-Z]{1}$/.test(input)) {
     return [false, "Only one letter, please — no numbers. 🔠"];
   }
 
