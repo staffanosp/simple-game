@@ -863,6 +863,13 @@ const printWord = (word, guessedLetters) =>
     .map((char) => (guessedLetters.includes(char) ? char : "_"))
     .join("  ");
 
+const getRemainingLives = (word, guessedLetters, livesFromStart) =>
+  guessedLetters.reduce(
+    (badGuesses, char) =>
+      checkIfLetterInWord(word, char) ? badGuesses : --badGuesses,
+    livesFromStart
+  );
+
 const printLives = (lives) => [...new Array(lives)].map(() => "❤️").join("");
 
 const checkIfLetterInWord = (word, letter) => word.includes(letter);
@@ -888,20 +895,23 @@ function startGame(firstRun = true) {
   //init game
   const word = words[Math.floor(Math.random() * words.length)].toUpperCase();
   let guessedLetters = [];
-  let lives = 10;
+  const livesFromStart = 10;
 
   //Start the game
   if (firstRun) alert("Let's play hangman! ☠️");
 
   //"The game loop"
-  while (!checkIfWin(word, guessedLetters) && lives) {
+  while (
+    !checkIfWin(word, guessedLetters) &&
+    getRemainingLives(word, guessedLetters, livesFromStart)
+  ) {
     //Ask user to input a letter
     const input = prompt(`
         Guess a letter
         \n
         ${printWord(word, guessedLetters)}
         ${guessedLetters.filter((letter) => !word.includes(letter)).join(" ")}
-        ${printLives(lives)}
+        ${printLives(getRemainingLives(word, guessedLetters, livesFromStart))}
         `);
 
     //break early if user cancels
@@ -931,7 +941,6 @@ function startGame(firstRun = true) {
       ${guessedLetter}
       `);
     } else {
-      if (!checkIfLetterInWord(word, guessedLetter)) lives--;
       guessedLetters.push(guessedLetter);
     }
 
@@ -953,7 +962,7 @@ function startGame(firstRun = true) {
     }
 
     //Game Over?
-    if (!lives) {
+    if (!getRemainingLives(word, guessedLetters, livesFromStart)) {
       alert(`
       💀💀💀 Game Over 💀💀💀
       \n
